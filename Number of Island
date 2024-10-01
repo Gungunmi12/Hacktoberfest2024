@@ -1,0 +1,61 @@
+public class NumberOfIslands {
+
+    // Directions arrays for moving up, down, left, right
+    private static final int[] rowDir = {-1, 1, 0, 0};
+    private static final int[] colDir = {0, 0, -1, 1};
+
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+
+        int numIslands = 0;
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        // Traverse the grid
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // If we encounter a '1', it's part of an island
+                if (grid[i][j] == '1') {
+                    numIslands++;
+                    // Mark the entire island as visited by using DFS
+                    dfs(grid, i, j);
+                }
+            }
+        }
+        return numIslands;
+    }
+
+    // Depth-First Search to mark all parts of the island as visited
+    private void dfs(char[][] grid, int row, int col) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        // If out of bounds or water, stop the DFS
+        if (row < 0 || row >= rows || col < 0 || col >= cols || grid[row][col] == '0') {
+            return;
+        }
+
+        // Mark the current cell as '0' to show it's visited
+        grid[row][col] = '0';
+
+        // Explore all 4 directions
+        for (int i = 0; i < 4; i++) {
+            int newRow = row + rowDir[i];
+            int newCol = col + colDir[i];
+            dfs(grid, newRow, newCol);
+        }
+    }
+
+    public static void main(String[] args) {
+        NumberOfIslands solution = new NumberOfIslands();
+        char[][] grid = {
+            {'1', '1', '0', '0', '0'},
+            {'1', '1', '0', '0', '0'},
+            {'0', '0', '1', '0', '0'},
+            {'0', '0', '0', '1', '1'}
+        };
+        System.out.println("Number of islands: " + solution.numIslands(grid));  // Output: 3
+    }
+}
